@@ -23,7 +23,7 @@ after_test:
   - dotnet pack .\src\DotNetSortRefs --configuration Release /p:Version=%TARGET_BUILD_VERSION%
 
 artifacts:
-  - path: '**\DotNetSortRefs.*.*nupkg' # find all NuGet packages recursively
+  - path: '**\dotnet-sort-refs.*.*nupkg' # find all NuGet packages recursively
 
 deploy:
   provider: NuGet
