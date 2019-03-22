@@ -7,7 +7,7 @@ This initial version is not yet available in NuGet hence the only way to install
 ```bash
 # Goto folder src\DotNetSortRefs
 dotnet pack
-dotnet tool install --global --add-source .\nupkg dotnet-sort-refs
+dotnet tool install --global --add-source --version 0.1.0.\nupkg dotnet-sort-refs
 ```
 
 ## Usage
