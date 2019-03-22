@@ -1,13 +1,12 @@
 # dotnet-sort-refs
+[![Build status](https://ci.appveyor.com/api/projects/status/xse0bia9olr5shxr?svg=true)](https://ci.appveyor.com/project/BabuAnnamalai/dotnet-sort-refs) [![NuGet Version](https://badgen.net/nuget/v/dotnet-sort-refs)](https://www.nuget.org/packages/dotnet-sort-refs/)
+
 A .NET Core global tool to alphabetically sort package references in your .NET Core and .NET Standard projects.
 
 ## Installation
-This initial version is not yet available in NuGet hence the only way to install is to clone the repository, build and install it as a global tool from local source
-
 ```bash
-# Goto folder src\DotNetSortRefs
 dotnet pack
-dotnet tool install --global --add-source --version 0.1.0.\nupkg dotnet-sort-refs
+dotnet tool install --global dotnet-sort-refs
 ```
 
 ## Usage
