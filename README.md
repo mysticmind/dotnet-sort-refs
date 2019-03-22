@@ -5,7 +5,6 @@ A .NET Core global tool to alphabetically sort package references in your .NET C
 
 ## Installation
 ```bash
-dotnet pack
 dotnet tool install --global dotnet-sort-refs
 ```
 
