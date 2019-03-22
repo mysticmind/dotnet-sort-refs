@@ -32,3 +32,4 @@ deploy:
   artifact: /.*\.nupkg/
   on:
     APPVEYOR_REPO_TAG: true
+
