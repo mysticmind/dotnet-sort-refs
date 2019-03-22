@@ -10,7 +10,7 @@ dotnet tool install --global dotnet-sort-refs
 
 ## Usage
 ```text
-dotnet sort-refs [arguments] [options]
+dotnet-sort-refs [arguments] [options]
 
 Arguments:
   Path          The path to a .csproj, .fsproj or directory. If a directory is specified, all .csproj and .fsproj files within folder tree will be processed. If none specified, it will use the current directory.
