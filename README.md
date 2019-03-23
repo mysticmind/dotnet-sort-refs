@@ -19,3 +19,5 @@ Options:
   --version     Show version information
   -?|-h|--help  Show help information
 ```
+
+Note: `dotnet sort-refs` and `dotnet-sort-refs` are valid usages to run the tool.
