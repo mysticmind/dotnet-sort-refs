@@ -19,4 +19,5 @@ Arguments:
 Options:
   --version     Show version information
   -?|-h|--help  Show help information
+  -i|--inspect  Specifies whether to inspect and return a non-zero exit code if one or more projects have non-sorted package references.
 ```
