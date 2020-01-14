@@ -90,9 +90,11 @@ namespace DotNetSortRefs
                 {
                     projFiles.Add(Path);
                 }
-
-                projFiles = _fileSystem.Directory.GetFiles(Path, "*.csproj", SearchOption.AllDirectories)
-                    .Concat(_fileSystem.Directory.GetFiles(Path, "*.fsproj", SearchOption.AllDirectories)).ToList();
+                else
+                {
+                    projFiles = _fileSystem.Directory.GetFiles(Path, "*.csproj", SearchOption.AllDirectories)
+                        .Concat(_fileSystem.Directory.GetFiles(Path, "*.fsproj", SearchOption.AllDirectories)).ToList();
+                }
 
                 if (projFiles.Count == 0)
                 {
@@ -124,21 +126,30 @@ namespace DotNetSortRefs
         private static async Task<List<string>> Inspect(IEnumerable<string> projFiles)
         {
             var projFilesWithNonSortedReferences = new List<string>();
-            
+
             foreach (var proj in projFiles)
             {
                 using (var sw = new StringWriter())
                 {
                     var doc = XDocument.Parse(System.IO.File.ReadAllText(proj));
 
-                    var packages = doc.XPathSelectElements("//ItemGroup[PackageReference|Reference]/*").Select(x => x.Attribute("Include")?.Value.ToLowerInvariant()).ToList();
-                    var sortedPackages = packages.OrderBy(x => x);
+                    var itemGroups = doc.XPathSelectElements("//ItemGroup[PackageReference|Reference]");
 
-                    var result = packages.SequenceEqual(sortedPackages);
-
-                    if (!result)
+                    foreach (var itemGroup in itemGroups)
                     {
-                        projFilesWithNonSortedReferences.Add(proj);
+                        var references = itemGroup.XPathSelectElements("PackageReference|Reference")
+                            .Select(x => x.Attribute("Include")?.Value.ToLowerInvariant()).ToList();
+
+                        if (references.Count <= 1) continue;
+
+                        var sortedReferences = references.OrderBy(x => x).ToList();
+
+                        var result = references.SequenceEqual(sortedReferences);
+
+                        if (!result && !projFilesWithNonSortedReferences.Contains(proj))
+                        {
+                            projFilesWithNonSortedReferences.Add(proj);
+                        }
                     }
                 }
             }

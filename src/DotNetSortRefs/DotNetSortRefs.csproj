@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>A .NET Core global tool to alphabetically sort package references in csproj or fsproj</Description>
-    <VersionPrefix>0.2.0</VersionPrefix>
+    <VersionPrefix>0.2.1</VersionPrefix>
     <Authors>Babu Annamalai</Authors>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
