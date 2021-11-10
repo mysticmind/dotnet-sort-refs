@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Description>A .NET Core global tool to alphabetically sort package references in csproj or fsproj</Description>
-    <VersionPrefix>0.2.1</VersionPrefix>
+    <VersionPrefix>0.2.2</VersionPrefix>
     <Authors>Babu Annamalai</Authors>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>dotnet-sort-refs</AssemblyName>
     <PackageId>dotnet-sort-refs</PackageId>
     <PackageOutputPath>./nupkg</PackageOutputPath>
