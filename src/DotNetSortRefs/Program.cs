@@ -39,7 +39,7 @@ namespace DotNetSortRefs
             {
                 var app = new CommandLineApplication<Program>
                 {
-                    ThrowOnUnexpectedArgument = false
+                    UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.Throw
                 };
 
                 app.Conventions
