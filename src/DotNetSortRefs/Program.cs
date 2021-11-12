@@ -31,30 +31,28 @@ namespace DotNetSortRefs
 
         static int Main(string[] args)
         {
-            using (var services = new ServiceCollection()
-                .AddSingleton<IConsole, PhysicalConsole>()
-                .AddSingleton<IReporter>(provider => new ConsoleReporter(provider.GetService<IConsole>()))
+            using var services = new ServiceCollection()
+                .AddSingleton(PhysicalConsole.Singleton)
+                .AddSingleton<IReporter>(provider => new ConsoleReporter(provider.GetService<IConsole>()!))
                 .AddSingleton<IFileSystem, FileSystem>()
-                .BuildServiceProvider())
+                .BuildServiceProvider();
+            var app = new CommandLineApplication<Program>
             {
-                var app = new CommandLineApplication<Program>
-                {
-                    UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.Throw
-                };
+                UnrecognizedArgumentHandling = UnrecognizedArgumentHandling.Throw
+            };
 
-                app.Conventions
-                    .UseDefaultConventions()
-                    .UseConstructorInjection(services);
+            app.Conventions
+                .UseDefaultConventions()
+                .UseConstructorInjection(services);
                 
-                try
-                {
-                    return app.Execute(args);
-                }
-                catch (UnrecognizedCommandParsingException)
-                {
-                    app.ShowHelp();
-                    return 1;
-                }
+            try
+            {
+                return app.Execute(args);
+            }
+            catch (UnrecognizedCommandParsingException)
+            {
+                app.ShowHelp();
+                return 1;
             }
         }
 
@@ -69,7 +67,7 @@ namespace DotNetSortRefs
         private static string GetVersion() => typeof(Program)
             .Assembly
             .GetCustomAttribute<AssemblyInformationalVersionAttribute>()
-            .InformationalVersion;
+            ?.InformationalVersion;
 
         private async Task<int> OnExecute(CommandLineApplication app, IConsole console)
         {
@@ -118,7 +116,7 @@ namespace DotNetSortRefs
             }
             catch (Exception e)
             {
-                _reporter.Error(e.StackTrace);
+                _reporter.Error(e.StackTrace!);
                 return 1;
             }
         }
@@ -181,12 +179,10 @@ namespace DotNetSortRefs
             {
                 _reporter.Output($"» {proj}");
 
-                using (var sw = new StringWriter())
-                {
-                    var doc = XDocument.Parse(System.IO.File.ReadAllText(proj));
-                    xslt.Transform(doc.CreateNavigator(), null, sw);
-                    File.WriteAllText(proj, sw.ToString());
-                }
+                await using var sw = new StringWriter();
+                var doc = XDocument.Parse(await System.IO.File.ReadAllTextAsync(proj));
+                xslt.Transform(doc.CreateNavigator(), null, sw);
+                await File.WriteAllTextAsync(proj, sw.ToString());
             }
 
             return await Task.FromResult(0);
@@ -195,13 +191,11 @@ namespace DotNetSortRefs
         private static XslCompiledTransform GetXslTransform()
         {   
             var assembly = Assembly.GetExecutingAssembly();
-            using (var stream = assembly.GetManifestResourceStream("DotNetSortRefs.Sort.xsl"))
-            using (var reader = XmlReader.Create(stream))
-            {
-                var xslt = new XslCompiledTransform();
-                xslt.Load(reader);
-                return xslt;
-            }
+            using var stream = assembly.GetManifestResourceStream("DotNetSortRefs.Sort.xsl");
+            using var reader = XmlReader.Create(stream!);
+            var xslt = new XslCompiledTransform();
+            xslt.Load(reader);
+            return xslt;
         }
     }
 }
