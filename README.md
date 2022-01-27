@@ -3,6 +3,9 @@
 
 A .NET Core global tool to alphabetically sort package references in your .NET Core and .NET Standard projects.
 
+If you have benefitted from this library and has saved you a bunch of time, please feel free to buy me a coffee using the button below<br>
+<a href="https://www.buymeacoffee.com/babuannamalai" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
 ## Why use this tool?
 References and package references in a project file are the most updated parts. Sorting the references helps with the following:
 - Easier merges on source control (git). Without sorting the package references in the project file, you may end up with more merge conflicts to fix. 
