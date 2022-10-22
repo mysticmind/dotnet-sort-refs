@@ -11,7 +11,7 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="ItemGroup[PackageReference|Reference]">
+    <xsl:template match="ItemGroup[PackageReference|Reference|PackageVersion]">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()">
                 <xsl:sort select="translate(@Include, $uppercase, $lowercase)" data-type="text" order="ascending"/>
