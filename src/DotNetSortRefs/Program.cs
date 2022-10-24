@@ -83,6 +83,7 @@ namespace DotNetSortRefs
                 }
 
                 var projFiles = new List<string>();
+                var extensions = new[] { ".csproj", ".fsproj", ".props" };
 
                 if (_fileSystem.File.Exists(Path))
                 {
@@ -90,13 +91,14 @@ namespace DotNetSortRefs
                 }
                 else
                 {
-                    projFiles = _fileSystem.Directory.GetFiles(Path, "*.csproj", SearchOption.AllDirectories)
-                        .Concat(_fileSystem.Directory.GetFiles(Path, "*.fsproj", SearchOption.AllDirectories)).ToList();
+                    projFiles = extensions
+                        .SelectMany(ext => _fileSystem.Directory.GetFiles(Path, $"*{ext}", SearchOption.AllDirectories))
+                        .ToList();
                 }
 
                 if (projFiles.Count == 0)
                 {
-                    _reporter.Error(".csproj or .fsproj files not found.");
+                    _reporter.Error($"no '{string.Join(", ", extensions)}'' files found.");
                     return 1;
                 }
 
@@ -131,11 +133,12 @@ namespace DotNetSortRefs
                 {
                     var doc = XDocument.Parse(System.IO.File.ReadAllText(proj));
 
-                    var itemGroups = doc.XPathSelectElements("//ItemGroup[PackageReference|Reference]");
+                    const string elementTypes = "PackageReference|Reference|PackageVersion";
+                    var itemGroups = doc.XPathSelectElements($"//ItemGroup[{elementTypes}]");
 
                     foreach (var itemGroup in itemGroups)
                     {
-                        var references = itemGroup.XPathSelectElements("PackageReference|Reference")
+                        var references = itemGroup.XPathSelectElements(elementTypes)
                             .Select(x => x.Attribute("Include")?.Value.ToLowerInvariant()).ToList();
 
                         if (references.Count <= 1) continue;
