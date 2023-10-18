@@ -4,7 +4,7 @@
     <VersionPrefix>1.0.1</VersionPrefix>
     <Authors>Babu Annamalai</Authors>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net5.0;net6.0;net7.0</TargetFrameworks>
     <AssemblyName>dotnet-sort-refs</AssemblyName>
     <PackageId>dotnet-sort-refs</PackageId>
     <PackageOutputPath>./nupkg</PackageOutputPath>
