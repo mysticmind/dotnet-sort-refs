@@ -20,16 +20,16 @@ before_build:
 build_script:
 - dotnet build .\src\DotNetSortRefs.sln --configuration Release
  
-after_test:
-  - dotnet pack .\src\DotNetSortRefs --configuration Release
+# after_test:
+#   - dotnet pack .\src\DotNetSortRefs --configuration Release
 
-artifacts:
-  - path: '**\dotnet-sort-refs.*.*nupkg' # find all NuGet packages recursively
+# artifacts:
+#   - path: '**\dotnet-sort-refs.*.*nupkg' # find all NuGet packages recursively
 
-deploy:
-  provider: NuGet
-  api_key: $(NUGET_DEPLOY_KEY)
-  artifact: /.*\.nupkg/
-  on:
-    APPVEYOR_REPO_TAG: true
+# deploy:
+#   provider: NuGet
+#   api_key: $(NUGET_DEPLOY_KEY)
+#   artifact: /.*\.nupkg/
+#   on:
+#     APPVEYOR_REPO_TAG: true
 
