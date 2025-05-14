@@ -13,3 +13,4 @@ Thumbs.db
 **/packages
 .idea
 nupkg
+.DS_Store
