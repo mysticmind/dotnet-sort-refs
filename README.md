@@ -1,5 +1,5 @@
 # dotnet-sort-refs
-[![Build status](https://ci.appveyor.com/api/projects/status/xse0bia9olr5shxr?svg=true)](https://ci.appveyor.com/project/BabuAnnamalai/dotnet-sort-refs) [![NuGet Version](https://badgen.net/nuget/v/dotnet-sort-refs)](https://www.nuget.org/packages/dotnet-sort-refs/)
+[![Build status](https://ci.appveyor.com/api/projects/status/q3tr2vkto018w1l7/branch/master?svg=true)](https://ci.appveyor.com/project/BabuAnnamalai/dotnet-sort-refs/branch/master) [![NuGet Version](https://badgen.net/nuget/v/dotnet-sort-refs)](https://www.nuget.org/packages/dotnet-sort-refs/)
 
 A .NET Core global tool to alphabetically sort package references in your .NET Core and .NET Standard projects.
 
