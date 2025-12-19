@@ -129,28 +129,26 @@ namespace DotNetSortRefs
 
             foreach (var proj in projFiles)
             {
-                using (var sw = new StringWriter())
+                await using var sw = new StringWriter();
+                var doc = XDocument.Parse(await File.ReadAllTextAsync(proj));
+
+                const string elementTypes = "PackageReference|Reference|PackageVersion";
+                var itemGroups = doc.XPathSelectElements($"//ItemGroup[{elementTypes}]");
+
+                foreach (var itemGroup in itemGroups)
                 {
-                    var doc = XDocument.Parse(System.IO.File.ReadAllText(proj));
+                    var references = itemGroup.XPathSelectElements(elementTypes)
+                        .Select(x => x.Attribute("Include")?.Value.ToLowerInvariant()).ToList();
 
-                    const string elementTypes = "PackageReference|Reference|PackageVersion";
-                    var itemGroups = doc.XPathSelectElements($"//ItemGroup[{elementTypes}]");
+                    if (references.Count <= 1) continue;
 
-                    foreach (var itemGroup in itemGroups)
+                    var sortedReferences = references.OrderBy(x => x).ToList();
+
+                    var result = references.SequenceEqual(sortedReferences);
+
+                    if (!result && !projFilesWithNonSortedReferences.Contains(proj))
                     {
-                        var references = itemGroup.XPathSelectElements(elementTypes)
-                            .Select(x => x.Attribute("Include")?.Value.ToLowerInvariant()).ToList();
-
-                        if (references.Count <= 1) continue;
-
-                        var sortedReferences = references.OrderBy(x => x).ToList();
-
-                        var result = references.SequenceEqual(sortedReferences);
-
-                        if (!result && !projFilesWithNonSortedReferences.Contains(proj))
-                        {
-                            projFilesWithNonSortedReferences.Add(proj);
-                        }
+                        projFilesWithNonSortedReferences.Add(proj);
                     }
                 }
             }
@@ -182,10 +180,28 @@ namespace DotNetSortRefs
             {
                 _reporter.Output($"» {proj}");
 
+                var originalContent = await File.ReadAllTextAsync(proj);
+                
+                string trailingNewline = null;
+                if (originalContent.Length > 0)
+                {
+                    if (originalContent.EndsWith("\r\n"))
+                        trailingNewline = "\r\n";
+                    else if (originalContent.EndsWith("\n"))
+                        trailingNewline = "\n";
+                }
+
                 await using var sw = new StringWriter();
-                var doc = XDocument.Parse(await System.IO.File.ReadAllTextAsync(proj));
+                var doc = XDocument.Parse(originalContent);
                 xslt.Transform(doc.CreateNavigator(), null, sw);
-                await File.WriteAllTextAsync(proj, sw.ToString());
+                
+                var transformedContent = sw.ToString();
+                if (trailingNewline != null && !transformedContent.EndsWith("\n"))
+                {
+                    transformedContent += trailingNewline;
+                }
+                
+                await File.WriteAllTextAsync(proj, transformedContent);
             }
 
             return await Task.FromResult(0);
